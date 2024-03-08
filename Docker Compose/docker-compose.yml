@@ -1,0 +1,37 @@
+version: "3.8"
+services:
+    mongodb:
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=hello
+            - MONGO_INITDB_ROOT_PASSWORD=softuni
+        volumes:
+            - data:/data/db
+        image: mongo
+        networks:
+            - shoppinglist
+      
+    shoppinglist-backend:
+      ports:
+          - 80:80
+      volumes:
+          - logs:/logs
+          - node_modules:/node_modules
+      image: dinevsg/shoppinglist-backend
+      networks:
+          - shoppinglist
+
+    shoppinglist-frontend:
+        container_name: frontend
+        networks:
+            - shoppinglist
+        ports:
+            - 3000:3000
+        volumes:
+            - ./frontend/src:/src
+        image: dinevsg/shoppinglist-frontend
+networks:
+    shoppinglist:
+volumes:
+    data:
+    logs:
+    node_modules:
